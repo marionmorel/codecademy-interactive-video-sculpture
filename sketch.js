@@ -16,12 +16,24 @@ let counter = 1;
 function setup() {
   createCanvas(600, 500);
   // TODO: Load videos
+  cloudVideo = createVideo(cloudPath);
+  starsVideo = createVideo(starsPath);
+  staticVideo = createVideo(staticPath);
+  humanVideo = createVideo(humanPath);
 
   // TODO: Populate videos array
+  videos = [cloudVideo, starsVideo, staticVideo, humanVideo];
 
   // TODO: Iterate over videos to loop, mute, and hide each one
+  for (let i = 0; i < videos.length; i++) {
+    let video = videos[i];
+    video.volume(0);
+    video.loop();
+    video.hide();
+  }
 
   // TODO: Populate outsideVideos array
+  outsideVideos = [cloudVideo, starsVideo, staticVideo];
 
 }
 
@@ -45,9 +57,24 @@ function draw() {
       rect(x, y, w, h);
       
       // TODO: Fill this "screen" with a video, according to its (i,j) position
-
+      if (i === 1 && j === 1) {
+        image(humanVideo, x, y, w, h, 0, 0, humanVideo.width / 2, humanVideo.height / 2);
+      } else if (i === 1 && j === 2) {
+        image(humanVideo, x, y, w, h, 0, humanVideo.height / 2, humanVideo.width / 2, humanVideo.height / 2);
+      } else if (i === 2 && j === 1) {
+        image(humanVideo, x, y, w, h, humanVideo.width / 2, 0, humanVideo.width / 2, humanVideo.height / 2)
+      } else if (i === 2 && j === 2) {
+        image(humanVideo, x, y, w, h, humanVideo.width / 2, humanVideo.height / 2, humanVideo.width / 2, humanVideo.height / 2)
+      } else {
+          let selectedIndex = (i + j * counter) % outsideVideos.length
+          selectedVideo = outsideVideos[selectedIndex];
+          image(selectedVideo, x, y, w, h);
+      }
     }
   }
 }
 
 // TODO: Make videos on the outside change when mouse is clicked
+function mouseClicked() {
+    counter++;
+}
